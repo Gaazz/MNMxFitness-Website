@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Programs & Pricing — MNM Fitness</title>
+  <meta name="description" content="MNM Fitness programs — Premium 2-on-1 coaching phases, monthly subscriptions, and one-time purchases. In-person or remote." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .page-hero { min-height: 50vh; display: flex; align-items: flex-end; position: relative; overflow: hidden; padding: 0; }
+    .page-hero-bg { position: absolute; inset: 0; background-image: url('images/411fbcf52a4f752441e1cb2d64e1b4e4.jpg.jpeg'); background-size: cover; background-position: center 30%; filter: brightness(0.25); }
+    .page-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 30%, var(--black) 100%); }
+    .page-hero-content { position: relative; z-index: 2; width: 90%; max-width: var(--max-width); margin: 0 auto; padding: 130px 0 70px; }
+    .page-hero-content h1 { font-family: var(--font-display); font-size: clamp(3rem, 7vw, 6rem); line-height: 0.95; letter-spacing: 0.02em; color: var(--white); }
+    .page-hero-content p { font-size: 1.05rem; color: var(--white-dim); max-width: 520px; margin-top: 1.2rem; line-height: 1.75; }
+    .page-tabs { background: var(--black-mid); border-bottom: 1px solid var(--grey-line); position: sticky; top: var(--nav-h); z-index: 80; }
+    .page-tabs-inner { display: flex; }
+    .page-tab { font-family: var(--font-condensed); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--white-mute); padding: 18px 28px; border-bottom: 2px solid transparent; transition: all var(--transition); }
+    .page-tab:hover { color: var(--white); }
+    .page-tab.active { color: var(--red); border-bottom-color: var(--red); }
+    .coaching-intro { background: var(--black-mid); padding: 80px 0; border-bottom: 1px solid var(--grey-line); }
+    .coaching-intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .coaching-intro p { font-size: 1rem; color: var(--white-dim); line-height: 1.85; margin-bottom: 1.2rem; }
+    .coaching-badges { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+    .badge { background: var(--black-card); border: 1px solid var(--grey-line); padding: 8px 18px; font-family: var(--font-condensed); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--white-dim); }
+    .badge.red { background: rgba(249,30,15,0.1); border-color: var(--red); color: var(--red); }
+    .coaching-img { width: 100%; height: 460px; object-fit: cover; filter: grayscale(20%); display: block; }
+    .phases-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--grey-line); }
+    .phase-card { background: var(--black-card); padding: 3rem; position: relative; overflow: hidden; transition: background var(--transition); }
+    .phase-card:hover { background: var(--black-card2); }
+    .phase-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2rem; gap: 1rem; }
+    .phase-badge { font-family: var(--font-condensed); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; padding: 6px 14px; border: 1px solid var(--red); color: var(--red); white-space: nowrap; }
+    .phase-level { font-family: var(--font-condensed); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--white-mute); margin-bottom: 0.5rem; }
+    .phase-card h3 { font-family: var(--font-display); font-size: 2rem; color: var(--white); line-height: 1; margin-bottom: 0.3rem; }
+    .phase-prices { display: flex; gap: 1.5rem; margin: 1.5rem 0; flex-wrap: wrap; }
+    .phase-price-option { padding: 1rem 1.5rem; background: rgba(255,255,255,0.03); border: 1px solid var(--grey-line); text-align: center; flex: 1; min-width: 140px; }
+    .phase-price-option .label { font-family: var(--font-condensed); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--white-mute); margin-bottom: 6px; }
+    .phase-price-option .amount { font-family: var(--font-display); font-size: 1.8rem; color: var(--white); line-height: 1; }
+    .phase-price-option.highlight { border-color: var(--red); background: rgba(249,30,15,0.06); }
+    .phase-price-option.highlight .amount { color: var(--red); }
+    .phase-features { display: flex; flex-direction: column; gap: 0.65rem; margin: 1.5rem 0 2rem; }
+    .phase-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--white-dim); line-height: 1.5; }
+    .phase-features li::before { content: '▸'; color: var(--red); flex-shrink: 0; margin-top: 1px; font-size: 0.7rem; }
+    .phase-free-month { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-condensed); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 1.5rem; padding: 8px 14px; background: rgba(249,30,15,0.08); border: 1px solid rgba(249,30,15,0.2); }
+    .phase-free-month::before { content: '★'; font-size: 0.7rem; }
+    .subs-section { padding-top: 100px; }
+    #coaching, #subscriptions, #otp { scroll-margin-top: calc(var(--nav-h) + 57px); }
+    .subs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; margin-top: 3rem; background: var(--grey-line); }
+    .sub-card { background: var(--black-card); padding: 2.5rem; position: relative; overflow: hidden; transition: background var(--transition); }
+    .sub-card:hover { background: var(--black-card2); }
+    .sub-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--red); transform: scaleY(0); transform-origin: top; transition: transform 0.4s ease; }
+    .sub-card:hover::before { transform: scaleY(1); }
+    .sub-tag { font-family: var(--font-condensed); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); margin-bottom: 0.7rem; }
+    .sub-card h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--white); margin-bottom: 0.5rem; line-height: 1.1; }
+    .sub-price { font-family: var(--font-display); font-size: 2.2rem; color: var(--white); margin: 1rem 0; line-height: 1; }
+    .sub-price small { font-family: var(--font-body); font-size: 0.85rem; color: var(--white-mute); font-weight: 400; }
+    .sub-features { display: flex; flex-direction: column; gap: 0.6rem; margin: 1.2rem 0 1.8rem; }
+    .sub-features li { display: flex; align-items: flex-start; gap: 8px; font-size: 0.88rem; color: var(--white-dim); line-height: 1.5; }
+    .sub-features li::before { content: '—'; color: var(--red); flex-shrink: 0; }
+    .otp-section { padding-top: 80px; }
+    .otp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 3rem; background: var(--grey-line); }
+    .otp-card { background: var(--black-card); padding: 2.2rem; transition: background var(--transition); }
+    .otp-card:hover { background: var(--black-card2); }
+    .otp-card h4 { font-family: var(--font-condensed); font-size: 1rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--white); margin-bottom: 0.5rem; }
+    .otp-card .otp-price { font-family: var(--font-display); font-size: 1.8rem; color: var(--red); margin-bottom: 1rem; line-height: 1; }
+    .otp-card p { font-size: 0.87rem; color: var(--white-dim); line-height: 1.7; margin-bottom: 1.5rem; }
+    @media (max-width: 1024px) { .coaching-intro-grid { grid-template-columns: 1fr; } .coaching-img { height: 300px; } }
+    @media (max-width: 768px) { .phases-grid { grid-template-columns: 1fr; } .subs-grid { grid-template-columns: 1fr; } .otp-grid { grid-template-columns: 1fr 1fr; } .page-tabs-inner { overflow-x: auto; } }
+    @media (max-width: 540px) { .otp-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="images/a25d11a0684fbc451915087ff3bc992e.png" alt="MNM Fitness" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="programs.html" class="active">Programs</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="login.html">My Account</a></li>
+        <li><a href="contact.html" class="nav-cta">Book A Call</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="index.html">Home</a>
+    <a href="programs.html">Programs</a>
+    <a href="contact.html">Contact Us</a>
+    <a href="login.html">My Account</a>
+    <a href="contact.html" class="nav-cta">Book A Call</a>
+  </div>
+
+  <section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <p class="section-label">Programs & Pricing</p>
+      <h1>Choose<br>Your Path</h1>
+      <p>Every program is built around you — your goals, your schedule, your starting point. No templates. No shortcuts.</p>
+    </div>
+  </section>
+
+  <div class="page-tabs">
+    <div class="container">
+      <div class="page-tabs-inner">
+        <a href="#coaching" class="page-tab active">Premium Coaching</a>
+        <a href="#subscriptions" class="page-tab">Subscriptions</a>
+        <a href="#otp" class="page-tab">One-Time Purchases</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="coaching-intro" id="coaching">
+    <div class="container">
+      <div class="coaching-intro-grid">
+        <div class="reveal-left">
+          <p class="section-label">Premium 2 on 1 Coaching</p>
+          <h2 class="section-title">The MNM<br>Method</h2>
+          <p>Our Premium 2-on-1 Coaching is a fully immersive experience designed to guide clients through a proven process — whether in person or remotely. The method does not change. The standard does not change.</p>
+          <p>Every client begins with a detailed assessment of training history, lifestyle demands, nutrition habits, movement patterns, and goals. From there, we build a customized strategy that fits the individual — not just on paper, but in real life.</p>
+          <p>Beyond training and nutrition, we focus heavily on systems, discipline, and lifestyle structure. Our role is to teach clients how to train, eat, and live with intention.</p>
+          <div class="coaching-badges">
+            <div class="badge red">In-Person</div>
+            <div class="badge red">Remote</div>
+            <div class="badge">Custom Programming</div>
+            <div class="badge">Direct Coach Access</div>
+            <div class="badge">Results Guaranteed</div>
+          </div>
+        </div>
+        <div class="reveal-right">
+          <img src="images/408a807a433c9fa4bb9e626d71ecf1fd.png" alt="MNM Fitness Coaching" class="coaching-img" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:var(--black-mid);border-top:1px solid var(--grey-line);">
+    <div class="container">
+      <p class="section-label reveal">Coaching Phases</p>
+      <h2 class="section-title reveal" data-delay="80">Premium In Person<br>2 on 1 Coaching</h2>
+      <p class="section-sub reveal" data-delay="160">Three structured phases. One complete transformation. Complete all three and receive 10% off.</p>
+      <div class="phases-grid" style="margin-top:3.5rem;">
+
+        <div class="phase-card reveal" data-delay="0">
+          <div class="phase-top">
+            <div><div class="phase-level">Beginner — 1 year or less gym experience</div><h3>Phase One:<br>Foundation</h3></div>
+            <div class="phase-badge">Phase 01</div>
+          </div>
+          <div class="phase-prices">
+            <div class="phase-price-option"><div class="label">Remote</div><div class="amount">$299</div></div>
+            <div class="phase-price-option highlight"><div class="label">In Person</div><div class="amount">$599</div></div>
+          </div>
+          <ul class="phase-features">
+            <li>Fully customized training &amp; nutrition based on your goals, lifestyle, and schedule</li>
+            <li>Direct access to your coach for ongoing support, feedback, and adjustments</li>
+            <li>Mindset, lifestyle, and routine optimization beyond the gym</li>
+            <li>Accountability systems and progress tracking</li>
+          </ul>
+          <div class="phase-free-month">Complete Phase One = 1 Month Free</div>
+          <a href="contact.html" class="btn btn-ghost">Get Started</a>
+        </div>
+
+        <div class="phase-card reveal" data-delay="120">
+          <div class="phase-top">
+            <div><div class="phase-level">Intermediate — 1–3 years gym experience</div><h3>Phase Two:<br>Evolution</h3></div>
+            <div class="phase-badge">Phase 02</div>
+          </div>
+          <div class="phase-prices">
+            <div class="phase-price-option"><div class="label">Remote</div><div class="amount">$299</div></div>
+            <div class="phase-price-option highlight"><div class="label">In Person</div><div class="amount">$599</div></div>
+          </div>
+          <ul class="phase-features">
+            <li>Everything from Phase One: Foundation</li>
+            <li>Performance-based supplement guidance</li>
+            <li>Intermediate level exercises and execution</li>
+            <li>Sleep quality optimization &amp; stress management</li>
+            <li>Recovery protocols to support higher workload</li>
+          </ul>
+          <div class="phase-free-month">Complete Phase Two = 1 Month Free</div>
+          <a href="contact.html" class="btn btn-ghost">Get Started</a>
+        </div>
+
+        <div class="phase-card reveal" data-delay="0">
+          <div class="phase-top">
+            <div><div class="phase-level">Advanced — 3+ years gym experience</div><h3>Phase Three:<br>Mastery</h3></div>
+            <div class="phase-badge">Phase 03</div>
+          </div>
+          <div class="phase-prices">
+            <div class="phase-price-option"><div class="label">Remote</div><div class="amount">$299</div></div>
+            <div class="phase-price-option highlight"><div class="label">In Person</div><div class="amount">$599</div></div>
+          </div>
+          <ul class="phase-features">
+            <li>Advanced training methods: mechanical supersets, controlled failure, tempo manipulation</li>
+            <li>Physique weak point specialization (strength &amp; aesthetic)</li>
+            <li>Everything from Phases One &amp; Two</li>
+            <li>Partial reps for weak ranges &amp; paused rep protocols</li>
+          </ul>
+          <div class="phase-free-month">Complete Phase Three = 1 Month Free</div>
+          <a href="contact.html" class="btn btn-ghost">Get Started</a>
+        </div>
+
+        <div class="phase-card reveal" data-delay="120">
+          <div class="phase-top">
+            <div><div class="phase-level">Best Value — All three phases</div><h3>Complete<br>Transformation</h3></div>
+            <div class="phase-badge" style="background:var(--red);color:white;border:none;">Best Value</div>
+          </div>
+          <div class="phase-prices">
+            <div class="phase-price-option"><div class="label">Remote (9 mo)</div><div class="amount">$2,699</div></div>
+            <div class="phase-price-option highlight"><div class="label">In Person (9 mo)</div><div class="amount">$5,400</div></div>
+          </div>
+          <ul class="phase-features">
+            <li>Pay in full — get 10% discount code</li>
+            <li>Guaranteed transformation</li>
+            <li>Mindset shift &amp; daily discipline habits locked in</li>
+            <li>All MNM Phase value across Phases One, Two &amp; Three</li>
+            <li>Lifetime MNM community access</li>
+            <li>Free subscription / product access</li>
+            <li>3 months free after completion</li>
+          </ul>
+          <a href="contact.html" class="btn btn-primary">Buy Now</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="subs-section" id="subscriptions">
+    <div class="container">
+      <p class="section-label reveal">Monthly</p>
+      <h2 class="section-title reveal" data-delay="80">MNM<br>Subscriptions</h2>
+      <p class="section-sub reveal" data-delay="160">Pick your MNM subscription and build the foundation that keeps you consistent.</p>
+      <div class="subs-grid">
+        <div class="sub-card reveal" data-delay="0">
+          <div class="sub-tag">Monthly Subscription</div>
+          <h3>MNM 6 Week Training Block Membership</h3>
+          <div class="sub-price">$14.99<small> / mo</small></div>
+          <ul class="sub-features">
+            <li>Access to a continuously updated library of structured training programs</li>
+            <li>6 week training blocks to build a structured routine in the gym</li>
+            <li>MNM Training Vault Exercise Videos</li>
+            <li>Monthly focus areas to reinforce discipline and consistency</li>
+            <li>Clear systems and principles rather than temporary motivation</li>
+            <li>Designed to support long-term lifestyle and identity change</li>
+          </ul>
+          <a href="https://buy.stripe.com/28E9AV4XtccdcB9bq17g402" target="_blank" rel="noopener" class="btn btn-ghost">Become a Member</a>
+        </div>
+        <div class="sub-card reveal" data-delay="120">
+          <div class="sub-tag">Monthly Subscription</div>
+          <h3>MNM Training Vault</h3>
+          <div class="sub-price">$9.99<small> / mo</small></div>
+          <ul class="sub-features">
+            <li>Access to a continuously updated library of MNM training videos</li>
+            <li>Request specific training videos to be added the next month</li>
+          </ul>
+          <a href="https://buy.stripe.com/14A8wR9dJ0tv44D51D7g403" target="_blank" rel="noopener" class="btn btn-ghost">Become a Member</a>
+        </div>
+        <div class="sub-card reveal" data-delay="0">
+          <div class="sub-tag">Monthly Subscription</div>
+          <h3>MNM Weak Point Specialization</h3>
+          <div class="sub-price">$14.99<small> / mo</small></div>
+          <ul class="sub-features">
+            <li>Targeted training blocks to address lagging muscle groups</li>
+            <li>Intelligent exercise selection and volume prescription</li>
+            <li>Complements existing training without compromising recovery</li>
+            <li>Improves symmetry, strength, and performance</li>
+            <li>Rotating specialization focuses for continued improvement</li>
+          </ul>
+          <a href="https://buy.stripe.com/6oUaEZ61xb89at11Pr7g404" target="_blank" rel="noopener" class="btn btn-ghost">Become a Member</a>
+        </div>
+        <div class="sub-card reveal" data-delay="120">
+          <div class="sub-tag">Monthly Subscription</div>
+          <h3>MNM Meal Vault</h3>
+          <div class="sub-price">$9.99<small> / mo</small></div>
+          <ul class="sub-features">
+            <li>Expanding collection of high-protein, performance-focused meals</li>
+            <li>Options designed for both fat loss and muscle-building phases</li>
+            <li>Simple, repeatable recipes that fit real-world schedules</li>
+            <li>Clear portion guidance for consistency and control</li>
+            <li>Removes guesswork and decision fatigue around nutrition</li>
+          </ul>
+          <a href="https://buy.stripe.com/7sY9AV3Tp4JL44DgKl7g405" target="_blank" rel="noopener" class="btn btn-ghost">Become a Member</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="otp-section" id="otp" style="background:var(--black-mid);border-top:1px solid var(--grey-line);padding-bottom:100px;">
+    <div class="container">
+      <p class="section-label reveal">One-Time Purchases</p>
+      <h2 class="section-title reveal" data-delay="80">MNM Products</h2>
+      <p class="section-sub reveal" data-delay="160">Standalone guides and tools to accelerate your progress, available as a single purchase.</p>
+      <div class="otp-grid">
+        <div class="otp-card reveal" data-delay="0"><h4>MNM Pre/Post Workout Meals</h4><div class="otp-price">$5.99</div><p>Performance-driven meal options for training support and recovery. Optimizes energy levels and muscle repair with simple, consistent preparation.</p><a href="https://buy.stripe.com/8x2eVf9dJdgh44D8dP7g406" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.82rem;padding:10px 22px;">Buy Now</a></div>
+        <div class="otp-card reveal" data-delay="80"><h4>Simple/Complex Carbs + Best Protein Sources</h4><div class="otp-price">$5.99</div><p>Clear breakdown of carbohydrate types, high-quality protein sources, and practical portion guidance for different goals.</p><a href="https://buy.stripe.com/aFadRb75B6RTat1fGh7g407" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.82rem;padding:10px 22px;">Buy Now</a></div>
+        <div class="otp-card reveal" data-delay="160"><h4>MNM 7 Day Detox &amp; Dopamine Reset</h4><div class="otp-price">$4.99</div><p>A structured reset to improve focus, discipline, and self-control. Eliminates excessive digital stimulation and poor nutritional habits. Includes 7-day juice detox body cleanse.</p><a href="https://buy.stripe.com/4gM7sNdtZa457gP79L7g408" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.82rem;padding:10px 22px;">Buy Now</a></div>
+        <div class="otp-card reveal" data-delay="0"><h4>Fat Loss For Busy Men Blueprint</h4><div class="otp-price">$6.99</div><p>Efficient fat-loss strategies for demanding schedules. Minimal yet effective training structure. Built for long-term adherence rather than extremes.</p><a href="https://buy.stripe.com/5kQaEZ2PlgstcB9bq17g409" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.82rem;padding:10px 22px;">Buy Now</a></div>
+        <div class="otp-card reveal" data-delay="80"><h4>MNM Home Training Vault</h4><div class="otp-price">$4.99</div><p>Structured training programs requiring minimal equipment. Progressive programming for fat loss and muscle development without gym access.</p><a href="https://buy.stripe.com/3cIeVfey3b897gP0Ln7g40a" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.82rem;padding:10px 22px;">Buy Now</a></div>
+        <div class="otp-card reveal" data-delay="160"><h4>MNM Accountability Tracker</h4><div class="otp-price">$5.99</div><p>Weekly tracking system for training, nutrition, and habits. Simple format designed for long-term use. Builds awareness around behaviors and execution.</p><a href="https://buy.stripe.com/8x26oJblR5NPgRpdy97g40c" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:0.82rem;padding:10px 22px;">Buy Now</a></div>
+      </div>
+    </div>
+  </section>
+
+  <div style="background:var(--red);padding:60px 0;">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;">
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:clamp(1.8rem,3vw,2.6rem);color:var(--white);letter-spacing:0.02em;">Ready to start your transformation?</h2>
+        <p style="color:rgba(255,255,255,0.8);margin-top:0.5rem;font-size:1rem;">Book a free call — we'll find the right path for you.</p>
+      </div>
+      <a href="contact.html" class="btn" style="background:var(--white);color:var(--red);flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;">Book A Call</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <p>Building your body, mind &amp; lifestyle is the MNM way. Taking control of your life and the outcomes is how you grow.</p>
+          <div class="footer-socials">
+            <a href="https://www.youtube.com/channel/UCADaLFbRzQazHt6REiQwi5A" target="_blank" rel="noopener" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2s-.3-1.9-1.1-2.7c-1-.9-2.2-.9-2.7-.9C16.8 2.4 12 2.4 12 2.4s-4.8 0-7.7.2c-.5.1-1.7.1-2.7.9C.8 4.3.5 6.2.5 6.2S.2 8.4.2 10.6v2.1c0 2.2.3 4.4.3 4.4s.3 1.9 1.1 2.7c1 .9 2.4.9 3 1C6.7 21 12 21 12 21s4.8 0 7.7-.3c.5-.1 1.7-.1 2.7-.9.8-.8 1.1-2.7 1.1-2.7s.3-2.2.3-4.4v-2.1c0-2.2-.3-4.4-.3-4.4zM9.7 15.5V8.4l7.3 3.6-7.3 3.5z"/></svg></a>
+            <a href="https://www.instagram.com/mnmxfitness" target="_blank" rel="noopener" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8 0 3.2 0 3.6-.1 4.8-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.9.1-3.2 0-3.6 0-4.8-.1-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12c0-3.2 0-3.6.1-4.8C2.4 3.9 4 2.3 7.2 2.3c1.2-.1 1.6-.1 4.8-.1zm0-2.2C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1.1 8.3 0 8.7 0 12s0 3.7.1 4.9C.3 21.3 2.7 23.7 7.1 23.9 8.3 24 8.7 24 12 24s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7 .1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9C23.7 2.7 21.3.3 16.9.1 15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 100 12.4A6.2 6.2 0 0012 5.8zm0 10.2a4 4 0 110-8 4 4 0 010 8zm6.4-11.8a1.4 1.4 0 100 2.8 1.4 1.4 0 000-2.8z"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <a href="index.html">Home</a>
+          <a href="programs.html">Programs</a>
+          <a href="programs.html#coaching">Coaching</a>
+          <a href="programs.html#subscriptions">Subscriptions</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="mailto:mnmfitness02@gmail.com">mnmfitness02@gmail.com</a>
+          <a href="tel:+16475454129">+1 (647) 545-4129</a>
+          <a href="https://calendly.com/mnmfitness02/30min" target="_blank" rel="noopener">Book on Calendly</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 <em>MNM Fitness</em>. All rights reserved.</span>
+        <span>Toronto, Canada</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    const sections = document.querySelectorAll('#coaching, #subscriptions, #otp');
+    const tabs = document.querySelectorAll('.page-tab');
+
+    // Smooth scroll with correct offset on tab click
+    tabs.forEach(tab => {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (!target) return;
+        const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 110;
+        const tabBarH = document.querySelector('.page-tabs').offsetHeight;
+        const offset = navH + tabBarH;
+        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      });
+    });
+
+    // Update active tab on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          tabs.forEach(t => t.classList.remove('active'));
+          document.querySelector(`.page-tab[href="#${entry.target.id}"]`)?.classList.add('active');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '-110px 0px 0px 0px' });
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>

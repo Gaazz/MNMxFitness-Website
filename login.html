@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member Login — MNM Fitness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { min-height: 100vh; display: flex; flex-direction: column; background: var(--black); }
+    .login-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      padding-top: calc(var(--nav-h) + 40px);
+    }
+    .login-card {
+      width: 100%;
+      max-width: 460px;
+      background: var(--black-mid);
+      border: 1px solid var(--grey-line);
+      padding: 3rem;
+    }
+    .login-logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .login-logo img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+    }
+    .login-card h1 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--white);
+      text-align: center;
+      margin-bottom: 0.4rem;
+      line-height: 1;
+    }
+    .login-card .sub {
+      text-align: center;
+      color: var(--white-mute);
+      font-size: 0.9rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+    .login-form { display: flex; flex-direction: column; gap: 1rem; }
+    .login-form label {
+      font-family: var(--font-condensed);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white-dim);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+    .login-form input {
+      width: 100%;
+      background: var(--black-card);
+      border: 1px solid var(--grey-line);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      padding: 14px 18px;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .login-form input:focus { border-color: var(--red); }
+    .login-form input::placeholder { color: rgba(201,201,201,0.35); }
+    .login-btn { width: 100%; margin-top: 0.5rem; padding: 16px; font-size: 0.9rem; }
+    .login-note {
+      text-align: center;
+      color: var(--white-mute);
+      font-size: 0.82rem;
+      margin-top: 1rem;
+      line-height: 1.6;
+    }
+    .login-success { display: none; text-align: center; }
+    .login-success .check {
+      width: 64px; height: 64px;
+      background: rgba(249,30,15,0.1);
+      border: 2px solid var(--red);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 1.5rem; color: var(--red);
+    }
+    .login-success h2 { font-family: var(--font-display); font-size: 1.8rem; color: var(--white); margin-bottom: 0.8rem; }
+    .login-success p { color: var(--white-dim); line-height: 1.7; font-size: 0.95rem; }
+    .error-msg {
+      background: rgba(249,30,15,0.1);
+      border: 1px solid rgba(249,30,15,0.3);
+      color: #ff6b6b;
+      padding: 12px 16px;
+      font-size: 0.87rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .divider { display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--grey-line); }
+    .divider span {
+      font-family: var(--font-condensed);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--white-mute);
+    }
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 2rem;
+      color: var(--white-mute);
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--red); }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="images/a25d11a0684fbc451915087ff3bc992e.png" alt="MNM Fitness" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="contact.html" class="nav-cta">Book A Call</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="index.html">Home</a>
+    <a href="programs.html">Programs</a>
+    <a href="contact.html">Contact Us</a>
+    <a href="contact.html" class="nav-cta">Book A Call</a>
+  </div>
+
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <img src="images/a25d11a0684fbc451915087ff3bc992e.png" alt="MNM Fitness" />
+      </div>
+
+      <div id="loginForm">
+        <h1>Member Login</h1>
+        <p class="sub">Enter your email and we'll send you a secure login link — no password needed.</p>
+
+        <div class="error-msg" id="errorMsg"></div>
+
+        <form class="login-form" id="magicLinkForm">
+          <div>
+            <label for="loginEmail">Email Address</label>
+            <input type="email" id="loginEmail" placeholder="your@email.com" required />
+          </div>
+          <button type="submit" class="btn btn-primary login-btn">Send Login Link</button>
+        </form>
+
+        <p class="login-note">We'll send a secure link to your inbox. It expires in 30 minutes.</p>
+
+        <div class="divider"><span>Don't have an account?</span></div>
+        <a href="programs.html" class="btn btn-outline" style="width:100%;text-align:center;display:block;box-sizing:border-box;">View Programs & Subscribe</a>
+      </div>
+
+      <div class="login-success" id="loginSuccess">
+        <div class="check">✓</div>
+        <h2>Check Your Email</h2>
+        <p>We've sent a login link to <strong id="sentEmail" style="color:var(--white);"></strong>.<br><br>Click the link in the email to access your members area. It expires in 30 minutes.</p>
+      </div>
+
+      <a href="index.html" class="back-link">← Back to MNM Fitness</a>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+  <script>
+    const WORKER_URL = 'https://mnmfitness02.mnmfitness02.workers.dev';
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('error') === 'expired') {
+      const err = document.getElementById('errorMsg');
+      err.style.display = 'block';
+      err.textContent = 'Your login link has expired. Please request a new one.';
+    }
+    if (params.get('error') === 'invalid') {
+      const err = document.getElementById('errorMsg');
+      err.style.display = 'block';
+      err.textContent = 'Invalid login link. Please request a new one.';
+    }
+
+    document.getElementById('magicLinkForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const btn = e.target.querySelector('button');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      try {
+        await fetch(`${WORKER_URL}/auth/request-login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('loginSuccess').style.display = 'block';
+        document.getElementById('sentEmail').textContent = email;
+      } catch (err) {
+        btn.textContent = 'Send Login Link';
+        btn.disabled = false;
+        const errMsg = document.getElementById('errorMsg');
+        errMsg.style.display = 'block';
+        errMsg.textContent = 'Something went wrong. Please try again.';
+      }
+    });
+  </script>
+</body>
+</html>

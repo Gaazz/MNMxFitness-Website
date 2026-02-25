@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Members Area — MNM Fitness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: var(--black); min-height: 100vh; }
+    .members-wrap { padding-top: calc(var(--nav-h) + 60px); padding-bottom: 100px; }
+    .members-header {
+      border-bottom: 1px solid var(--grey-line);
+      padding-bottom: 3rem;
+      margin-bottom: 3rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .members-header-left .welcome {
+      font-family: var(--font-condensed);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.5rem;
+    }
+    .members-header-left h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--white);
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+    .members-header-left .email-tag { font-size: 0.88rem; color: var(--white-mute); margin-top: 0.6rem; }
+    .logout-btn {
+      font-family: var(--font-condensed);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--white-mute);
+      border: 1px solid var(--grey-line);
+      padding: 10px 20px;
+      cursor: pointer;
+      background: transparent;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover { border-color: var(--red); color: var(--red); }
+    .loading-state { text-align: center; padding: 80px 0; }
+    .loading-spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--grey-line);
+      border-top-color: var(--red);
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-state p { color: var(--white-mute); font-size: 0.9rem; }
+    .auth-required { display: none; text-align: center; padding: 120px 20px; }
+    .auth-required h2 { font-family: var(--font-display); font-size: 2rem; color: var(--white); margin-bottom: 1rem; }
+    .auth-required p { color: var(--white-dim); margin-bottom: 2rem; }
+    .section-divider { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+    .section-divider h2 {
+      font-family: var(--font-condensed);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white-mute);
+      white-space: nowrap;
+    }
+    .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--grey-line); }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2px;
+      background: var(--grey-line);
+      margin-bottom: 4rem;
+    }
+    .product-card {
+      background: var(--black-card);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+    .product-card:hover { background: var(--black-card2); }
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--red);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.3s ease;
+    }
+    .product-card:hover::before { transform: scaleY(1); }
+    .product-tag {
+      font-family: var(--font-condensed);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.6rem;
+    }
+    .product-card h3 { font-family: var(--font-display); font-size: 1.3rem; color: var(--white); margin-bottom: 0.5rem; line-height: 1.1; }
+    .product-card p { font-size: 0.85rem; color: var(--white-dim); line-height: 1.6; margin-bottom: 1.5rem; }
+    .month-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(249,30,15,0.08);
+      border: 1px solid rgba(249,30,15,0.2);
+      color: var(--red);
+      font-family: var(--font-condensed);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      margin-bottom: 1.2rem;
+    }
+    .month-badge::before { content: '★'; font-size: 0.6rem; }
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-condensed);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--white);
+      border: 1px solid var(--grey-line);
+      padding: 10px 20px;
+      cursor: pointer;
+      background: transparent;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .download-btn:hover { border-color: var(--red); color: var(--red); }
+    .locked-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--grey-line);
+      color: var(--white-mute);
+      font-family: var(--font-condensed);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      margin-bottom: 1.2rem;
+    }
+    .empty-state {
+      background: var(--black-card);
+      border: 1px solid var(--grey-line);
+      padding: 3rem;
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .empty-state h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--white); margin-bottom: 0.8rem; }
+    .empty-state p { color: var(--white-dim); margin-bottom: 1.5rem; font-size: 0.9rem; }
+    @media (max-width: 768px) {
+      .members-header { flex-direction: column; align-items: flex-start; }
+      .products-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="images/a25d11a0684fbc451915087ff3bc992e.png" alt="MNM Fitness" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="login.html" class="nav-cta">My Account</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="nav-mobile">
+    <a href="index.html">Home</a>
+    <a href="programs.html">Programs</a>
+    <a href="contact.html">Contact Us</a>
+    <a href="login.html">My Account</a>
+  </div>
+
+  <div class="auth-required" id="authRequired">
+    <div class="container">
+      <h2>Members Only</h2>
+      <p>You need to be logged in to access this area.</p>
+      <a href="login.html" class="btn btn-primary">Login to Your Account</a>
+    </div>
+  </div>
+
+  <div class="members-wrap container" id="membersContent" style="display:none;">
+    <div class="loading-state" id="loadingState">
+      <div class="loading-spinner"></div>
+      <p>Loading your account...</p>
+    </div>
+
+    <div id="dashboardContent" style="display:none;">
+      <div class="members-header">
+        <div class="members-header-left">
+          <div class="welcome">Members Area</div>
+          <h1>Welcome Back</h1>
+          <p class="email-tag" id="memberEmail"></p>
+        </div>
+        <button class="logout-btn" id="logoutBtn">Sign Out</button>
+      </div>
+
+      <div id="subsSection">
+        <div class="section-divider"><h2>Your Subscriptions</h2></div>
+        <div class="products-grid" id="subsGrid"></div>
+      </div>
+
+      <div id="otpSection">
+        <div class="section-divider"><h2>Your Purchases</h2></div>
+        <div class="products-grid" id="otpGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+  <script>
+    const WORKER_URL = 'https://mnmfitness02.mnmfitness02.workers.dev';
+
+    const SUBSCRIPTION_PRODUCTS = {
+      '6-week-training-block': {
+        name: 'MNM 6 Week Training Block',
+        tag: 'Monthly Subscription',
+        desc: 'Your structured 6-week training system. New blocks unlock each month.',
+        months: {
+          1: { label: 'Protocol I — Foundation', file: '6-week-training-block/mnm-6-week-block-protocol-1.pdf' },
+          2: { label: 'Protocol II — Progressive Overload', file: null },
+          3: { label: 'Protocol III — Intensity Phase', file: null },
+        }
+      },
+      'training-vault': {
+        name: 'MNM Training Vault',
+        tag: 'Monthly Subscription',
+        desc: 'Access the continuously updated MNM training video library.',
+        months: {}
+      },
+      'weak-point-specialization': {
+        name: 'MNM Weak Point Specialization',
+        tag: 'Monthly Subscription',
+        desc: 'Targeted training blocks to address lagging muscle groups.',
+        months: {}
+      },
+      'meal-vault': {
+        name: 'MNM Meal Vault',
+        tag: 'Monthly Subscription',
+        desc: 'High-protein, performance-focused meal collection.',
+        months: {}
+      }
+    };
+
+    const OTP_PRODUCTS = {
+      'pre-post-workout-meals': {
+        name: 'MNM Pre/Post Workout Meals',
+        tag: 'One-Time Purchase',
+        desc: 'Performance-driven meal options for training support and recovery.',
+        file: null
+      },
+      'carbs-protein-guide': {
+        name: 'Simple/Complex Carbs + Best Protein Sources',
+        tag: 'One-Time Purchase',
+        desc: 'Clear breakdown of carbohydrate types and high-quality protein sources.',
+        file: null
+      },
+      '7-day-detox': {
+        name: 'MNM 7 Day Detox & Dopamine Reset',
+        tag: 'One-Time Purchase',
+        desc: 'A structured reset to improve focus, discipline, and self-control.',
+        file: null
+      },
+      'fat-loss-blueprint': {
+        name: 'Fat Loss For Busy Men Blueprint',
+        tag: 'One-Time Purchase',
+        desc: 'Efficient fat-loss strategies for demanding schedules.',
+        file: null
+      },
+      'home-training-vault': {
+        name: 'MNM Home Training Vault',
+        tag: 'One-Time Purchase',
+        desc: 'Structured training programs requiring minimal equipment.',
+        file: null
+      },
+      'accountability-tracker': {
+        name: 'MNM Accountability Tracker',
+        tag: 'One-Time Purchase',
+        desc: 'Weekly tracking system for training, nutrition, and habits.',
+        file: null
+      }
+    };
+
+    async function loadMember() {
+      try {
+        const res = await fetch(`${WORKER_URL}/api/member`, { credentials: 'include' });
+        if (res.status === 401) {
+          document.getElementById('membersContent').style.display = 'none';
+          document.getElementById('authRequired').style.display = 'block';
+          return;
+        }
+        const member = await res.json();
+        renderDashboard(member);
+      } catch (err) {
+        document.getElementById('membersContent').style.display = 'none';
+        document.getElementById('authRequired').style.display = 'block';
+      }
+    }
+
+    function renderDashboard(member) {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('dashboardContent').style.display = 'block';
+      document.getElementById('memberEmail').textContent = member.email;
+
+      const subsGrid = document.getElementById('subsGrid');
+      if (member.subscriptions && member.subscriptions.length > 0) {
+        member.subscriptions.forEach(subId => {
+          const product = SUBSCRIPTION_PRODUCTS[subId];
+          if (!product) return;
+          const monthsActive = member.monthsActive?.[subId] || 1;
+          subsGrid.appendChild(renderSubscriptionCard(product, monthsActive));
+        });
+      } else {
+        document.getElementById('subsSection').innerHTML = `
+          <div class="section-divider"><h2>Your Subscriptions</h2></div>
+          <div class="empty-state">
+            <h3>No Active Subscriptions</h3>
+            <p>Subscribe to unlock structured training programs, meal plans, and more.</p>
+            <a href="programs.html#subscriptions" class="btn btn-primary">View Subscriptions</a>
+          </div>`;
+      }
+
+      const otpGrid = document.getElementById('otpGrid');
+      if (member.products && member.products.length > 0) {
+        member.products.forEach(productId => {
+          const product = OTP_PRODUCTS[productId];
+          if (!product) return;
+          otpGrid.appendChild(renderOTPCard(product));
+        });
+      } else {
+        document.getElementById('otpSection').innerHTML = `
+          <div class="section-divider"><h2>Your Purchases</h2></div>
+          <div class="empty-state">
+            <h3>No Purchases Yet</h3>
+            <p>Pick up one of our standalone guides and tools.</p>
+            <a href="programs.html#otp" class="btn btn-outline">View Products</a>
+          </div>`;
+      }
+    }
+
+    function renderSubscriptionCard(product, monthsActive) {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      const monthEntries = Object.entries(product.months || {});
+      let contentHtml = '';
+      if (monthEntries.length > 0) {
+        monthEntries.forEach(([month, content]) => {
+          const isUnlocked = monthsActive >= parseInt(month);
+          if (isUnlocked) {
+            contentHtml += `
+              <div style="margin-bottom:1rem;">
+                <div class="month-badge">Month ${month} — Unlocked</div>
+                <p style="margin:0 0 0.8rem;font-size:0.83rem;color:var(--white-dim);">${content.label}</p>
+                ${content.file ? `
+                  <a href="files/${content.file}" download class="download-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download PDF
+                  </a>` : `<span style="font-size:0.8rem;color:var(--white-mute);">Coming soon</span>`}
+              </div>`;
+          } else {
+            contentHtml += `
+              <div style="margin-bottom:1rem;opacity:0.4;">
+                <div class="locked-badge">🔒 Month ${month} — Renew to Unlock</div>
+                <p style="margin:0;font-size:0.83rem;color:var(--white-dim);">${content.label}</p>
+              </div>`;
+          }
+        });
+      } else {
+        contentHtml = `<p style="color:var(--white-mute);font-size:0.85rem;">Content coming soon.</p>`;
+      }
+      card.innerHTML = `
+        <div class="product-tag">${product.tag}</div>
+        <h3>${product.name}</h3>
+        <p>${product.desc}</p>
+        ${contentHtml}`;
+      return card;
+    }
+
+    function renderOTPCard(product) {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <div class="product-tag">${product.tag}</div>
+        <h3>${product.name}</h3>
+        <p>${product.desc}</p>
+        ${product.file ? `
+          <a href="files/${product.file}" download class="download-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download PDF
+          </a>` : `<span style="color:var(--white-mute);font-size:0.85rem;">File coming soon</span>`}`;
+      return card;
+    }
+
+    document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+      await fetch(`${WORKER_URL}/auth/logout`, { method: 'POST', credentials: 'include' });
+      window.location.href = 'login.html';
+    });
+
+    document.getElementById('membersContent').style.display = 'block';
+    loadMember();
+  </script>
+</body>
+</html>
