@@ -9,10 +9,14 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     body { background: var(--black); min-height: 100vh; }
-    .members-wrap { padding-top: calc(var(--nav-h) + 60px); padding-bottom: 100px; }
+
+    /* ─── LAYOUT ─── */
+    .members-wrap { padding-top: calc(var(--nav-h) + 50px); padding-bottom: 120px; }
+
+    /* ─── HEADER ─── */
     .members-header {
       border-bottom: 1px solid var(--grey-line);
-      padding-bottom: 3rem;
+      padding-bottom: 2.5rem;
       margin-bottom: 3rem;
       display: flex;
       align-items: flex-end;
@@ -22,38 +26,45 @@
     }
     .members-header-left .welcome {
       font-family: var(--font-condensed);
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--red);
       margin-bottom: 0.5rem;
     }
     .members-header-left h1 {
       font-family: var(--font-display);
-      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-size: clamp(2.2rem, 5vw, 4rem);
       color: var(--white);
       line-height: 1;
       letter-spacing: 0.02em;
     }
-    .members-header-left .email-tag { font-size: 0.88rem; color: var(--white-mute); margin-top: 0.6rem; }
+    .members-header-left .email-tag {
+      font-size: 0.85rem;
+      color: var(--white-mute);
+      margin-top: 0.6rem;
+    }
     .logout-btn {
       font-family: var(--font-condensed);
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--white-mute);
       border: 1px solid var(--grey-line);
-      padding: 10px 20px;
+      padding: 10px 22px;
       cursor: pointer;
       background: transparent;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
     .logout-btn:hover { border-color: var(--red); color: var(--red); }
+
+    /* ─── LOADING ─── */
     .loading-state { text-align: center; padding: 80px 0; }
     .loading-spinner {
-      width: 40px; height: 40px;
+      width: 36px; height: 36px;
       border: 3px solid var(--grey-line);
       border-top-color: var(--red);
       border-radius: 50%;
@@ -62,36 +73,41 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-state p { color: var(--white-mute); font-size: 0.9rem; }
+
+    /* ─── AUTH REQUIRED ─── */
     .auth-required { display: none; text-align: center; padding: 120px 20px; }
     .auth-required h2 { font-family: var(--font-display); font-size: 2rem; color: var(--white); margin-bottom: 1rem; }
     .auth-required p { color: var(--white-dim); margin-bottom: 2rem; }
-    .section-divider { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+
+    /* ─── SECTION DIVIDER ─── */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
     .section-divider h2 {
       font-family: var(--font-condensed);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--white-mute);
       white-space: nowrap;
     }
     .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--grey-line); }
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2px;
-      background: var(--grey-line);
-      margin-bottom: 4rem;
-    }
-    .product-card {
+
+    /* ─── SUBSCRIPTION CARD — FULL WIDTH HORIZONTAL LAYOUT ─── */
+    .sub-card-full {
       background: var(--black-card);
-      padding: 2rem;
+      border: 1px solid var(--grey-line);
+      margin-bottom: 2px;
       position: relative;
       overflow: hidden;
       transition: background 0.2s;
     }
-    .product-card:hover { background: var(--black-card2); }
-    .product-card::before {
+    .sub-card-full:hover { background: var(--black-card2); }
+    .sub-card-full::before {
       content: '';
       position: absolute;
       top: 0; left: 0;
@@ -101,67 +117,204 @@
       transform-origin: top;
       transition: transform 0.3s ease;
     }
-    .product-card:hover::before { transform: scaleY(1); }
-    .product-tag {
+    .sub-card-full:hover::before { transform: scaleY(1); }
+
+    .sub-card-inner {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      min-height: 200px;
+    }
+
+    /* Left panel — product info */
+    .sub-card-left {
+      padding: 2.5rem;
+      border-right: 1px solid var(--grey-line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .sub-tag {
       font-family: var(--font-condensed);
       font-size: 0.68rem;
       font-weight: 700;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--red);
       margin-bottom: 0.6rem;
     }
-    .product-card h3 { font-family: var(--font-display); font-size: 1.3rem; color: var(--white); margin-bottom: 0.5rem; line-height: 1.1; }
-    .product-card p { font-size: 0.85rem; color: var(--white-dim); line-height: 1.6; margin-bottom: 1.5rem; }
-    .month-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(249,30,15,0.08);
-      border: 1px solid rgba(249,30,15,0.2);
-      color: var(--red);
+    .sub-card-left h3 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: var(--white);
+      line-height: 1.05;
+      margin-bottom: 0.8rem;
+    }
+    .sub-card-left p {
+      font-size: 0.85rem;
+      color: var(--white-dim);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    /* Right panel — content/months */
+    .sub-card-right {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .sub-card-right-label {
       font-family: var(--font-condensed);
       font-size: 0.7rem;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      padding: 5px 10px;
-      margin-bottom: 1.2rem;
+      color: var(--white-mute);
+      margin-bottom: 1rem;
     }
-    .month-badge::before { content: '★'; font-size: 0.6rem; }
+
+    /* Month rows */
+    .month-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1.2rem 1.5rem;
+      border: 1px solid var(--grey-line);
+      background: rgba(255,255,255,0.02);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .month-row.unlocked {
+      border-color: rgba(249,30,15,0.25);
+      background: rgba(249,30,15,0.04);
+    }
+    .month-row-left { display: flex; align-items: center; gap: 1rem; flex: 1; }
+    .month-number {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--grey-line);
+      line-height: 1;
+      min-width: 40px;
+    }
+    .month-row.unlocked .month-number { color: var(--red); }
+    .month-info {}
+    .month-status {
+      font-family: var(--font-condensed);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--white-mute);
+      margin-bottom: 3px;
+    }
+    .month-row.unlocked .month-status { color: var(--red); }
+    .month-label {
+      font-size: 0.9rem;
+      color: var(--white-dim);
+      font-weight: 500;
+    }
+    .month-row.unlocked .month-label { color: var(--white); }
     .download-btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       font-family: var(--font-condensed);
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 700;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--white);
       border: 1px solid var(--grey-line);
       padding: 10px 20px;
-      cursor: pointer;
       background: transparent;
       transition: all 0.2s;
       text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
-    .download-btn:hover { border-color: var(--red); color: var(--red); }
-    .locked-badge {
+    .download-btn:hover { border-color: var(--red); color: var(--red); background: rgba(249,30,15,0.06); }
+    .coming-soon-tag {
+      font-family: var(--font-condensed);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--white-mute);
+      padding: 8px 14px;
+      border: 1px solid var(--grey-line);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .locked-tag {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--grey-line);
-      color: var(--white-mute);
       font-family: var(--font-condensed);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      padding: 5px 10px;
-      margin-bottom: 1.2rem;
+      color: var(--white-mute);
+      padding: 8px 14px;
+      border: 1px solid var(--grey-line);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
+
+    /* ─── OTP GRID ─── */
+    .otp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--grey-line);
+      margin-bottom: 4rem;
+    }
+    .otp-card {
+      background: var(--black-card);
+      padding: 2rem;
+      transition: background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .otp-card:hover { background: var(--black-card2); }
+    .otp-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--red);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.3s ease;
+    }
+    .otp-card:hover::before { transform: scaleY(1); }
+    .otp-tag {
+      font-family: var(--font-condensed);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.6rem;
+    }
+    .otp-card h3 {
+      font-family: var(--font-condensed);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+    .otp-card p {
+      font-size: 0.84rem;
+      color: var(--white-dim);
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ─── EMPTY STATE ─── */
     .empty-state {
       background: var(--black-card);
       border: 1px solid var(--grey-line);
@@ -171,9 +324,17 @@
     }
     .empty-state h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--white); margin-bottom: 0.8rem; }
     .empty-state p { color: var(--white-dim); margin-bottom: 1.5rem; font-size: 0.9rem; }
-    @media (max-width: 768px) {
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .sub-card-inner { grid-template-columns: 1fr; }
+      .sub-card-left { border-right: none; border-bottom: 1px solid var(--grey-line); }
+      .otp-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
       .members-header { flex-direction: column; align-items: flex-start; }
-      .products-grid { grid-template-columns: 1fr; }
+      .otp-grid { grid-template-columns: 1fr; }
+      .month-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
     }
   </style>
 </head>
@@ -188,7 +349,8 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="programs.html">Programs</a></li>
         <li><a href="contact.html">Contact Us</a></li>
-        <li><a href="login.html" class="nav-cta">My Account</a></li>
+        <li><a href="login.html">My Account</a></li>
+        <li><a href="contact.html" class="nav-cta">Book A Call</a></li>
       </ul>
       <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
     </div>
@@ -198,8 +360,10 @@
     <a href="programs.html">Programs</a>
     <a href="contact.html">Contact Us</a>
     <a href="login.html">My Account</a>
+    <a href="contact.html" class="nav-cta">Book A Call</a>
   </div>
 
+  <!-- Not logged in -->
   <div class="auth-required" id="authRequired">
     <div class="container">
       <h2>Members Only</h2>
@@ -208,13 +372,17 @@
     </div>
   </div>
 
+  <!-- Main content -->
   <div class="members-wrap container" id="membersContent" style="display:none;">
+
     <div class="loading-state" id="loadingState">
       <div class="loading-spinner"></div>
       <p>Loading your account...</p>
     </div>
 
     <div id="dashboardContent" style="display:none;">
+
+      <!-- Header -->
       <div class="members-header">
         <div class="members-header-left">
           <div class="welcome">Members Area</div>
@@ -224,15 +392,18 @@
         <button class="logout-btn" id="logoutBtn">Sign Out</button>
       </div>
 
+      <!-- Subscriptions -->
       <div id="subsSection">
         <div class="section-divider"><h2>Your Subscriptions</h2></div>
-        <div class="products-grid" id="subsGrid"></div>
+        <div id="subsGrid"></div>
       </div>
 
+      <!-- One-Time Purchases -->
       <div id="otpSection">
         <div class="section-divider"><h2>Your Purchases</h2></div>
-        <div class="products-grid" id="otpGrid"></div>
+        <div class="otp-grid" id="otpGrid"></div>
       </div>
+
     </div>
   </div>
 
@@ -244,7 +415,7 @@
       '6-week-training-block': {
         name: 'MNM 6 Week Training Block',
         tag: 'Monthly Subscription',
-        desc: 'Your structured 6-week training system. New blocks unlock each month.',
+        desc: 'Your structured 6-week training system. New blocks unlock each month as you renew.',
         months: {
           1: { label: 'Protocol I — Foundation', file: '6-week-training-block/mnm-6-week-block-protocol-1.pdf' },
           2: { label: 'Protocol II — Progressive Overload', file: null },
@@ -276,37 +447,37 @@
         name: 'MNM Pre/Post Workout Meals',
         tag: 'One-Time Purchase',
         desc: 'Performance-driven meal options for training support and recovery.',
-        file: null
+        file: 'one-time-products/pre-post-workout-meals.pdf'
       },
       'carbs-protein-guide': {
         name: 'Simple/Complex Carbs + Best Protein Sources',
         tag: 'One-Time Purchase',
         desc: 'Clear breakdown of carbohydrate types and high-quality protein sources.',
-        file: null
+        file: 'one-time-products/carbs-protein-guide.pdf'
       },
       '7-day-detox': {
         name: 'MNM 7 Day Detox & Dopamine Reset',
         tag: 'One-Time Purchase',
         desc: 'A structured reset to improve focus, discipline, and self-control.',
-        file: null
+        file: 'one-time-products/7-day-detox.pdf'
       },
       'fat-loss-blueprint': {
         name: 'Fat Loss For Busy Men Blueprint',
         tag: 'One-Time Purchase',
         desc: 'Efficient fat-loss strategies for demanding schedules.',
-        file: null
+        file: 'one-time-products/fat-loss-blueprint.pdf'
       },
       'home-training-vault': {
         name: 'MNM Home Training Vault',
         tag: 'One-Time Purchase',
         desc: 'Structured training programs requiring minimal equipment.',
-        file: null
+        file: 'one-time-products/home-training-vault.pdf'
       },
       'accountability-tracker': {
         name: 'MNM Accountability Tracker',
         tag: 'One-Time Purchase',
         desc: 'Weekly tracking system for training, nutrition, and habits.',
-        file: null
+        file: 'one-time-products/accountability-tracker.pdf'
       }
     };
 
@@ -316,7 +487,6 @@
         if (res.status === 401) {
           document.getElementById('membersContent').style.display = 'none';
           document.getElementById('authRequired').style.display = 'block';
-          document.getElementById('authRequired').innerHTML += `<p style="color:#f91e0f;font-size:0.8rem;margin-top:1rem;">Debug: 401 - cookies: ${document.cookie ? 'present' : 'empty'}</p>`;
           return;
         }
         const member = await res.json();
@@ -324,7 +494,6 @@
       } catch (err) {
         document.getElementById('membersContent').style.display = 'none';
         document.getElementById('authRequired').style.display = 'block';
-        document.getElementById('authRequired').innerHTML += `<p style="color:#f91e0f;font-size:0.8rem;margin-top:1rem;">Debug: ${err.message}</p>`;
       }
     }
 
@@ -371,54 +540,69 @@
 
     function renderSubscriptionCard(product, monthsActive) {
       const card = document.createElement('div');
-      card.className = 'product-card';
+      card.className = 'sub-card-full';
+
       const monthEntries = Object.entries(product.months || {});
-      let contentHtml = '';
+      let monthsHtml = '';
+
       if (monthEntries.length > 0) {
+        monthsHtml = `<p class="sub-card-right-label">Content Access</p>`;
         monthEntries.forEach(([month, content]) => {
           const isUnlocked = monthsActive >= parseInt(month);
-          if (isUnlocked) {
-            contentHtml += `
-              <div style="margin-bottom:1rem;">
-                <div class="month-badge">Month ${month} — Unlocked</div>
-                <p style="margin:0 0 0.8rem;font-size:0.83rem;color:var(--white-dim);">${content.label}</p>
-                ${content.file ? `
-                  <a href="files/${content.file}" download class="download-btn">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          const actionHtml = isUnlocked
+            ? (content.file
+                ? `<a href="files/${content.file}" download class="download-btn">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                     Download PDF
-                  </a>` : `<span style="font-size:0.8rem;color:var(--white-mute);">Coming soon</span>`}
-              </div>`;
-          } else {
-            contentHtml += `
-              <div style="margin-bottom:1rem;opacity:0.4;">
-                <div class="locked-badge">🔒 Month ${month} — Renew to Unlock</div>
-                <p style="margin:0;font-size:0.83rem;color:var(--white-dim);">${content.label}</p>
-              </div>`;
-          }
+                  </a>`
+                : `<span class="coming-soon-tag">Coming Soon</span>`)
+            : `<span class="locked-tag">🔒 Renew to Unlock</span>`;
+
+          monthsHtml += `
+            <div class="month-row ${isUnlocked ? 'unlocked' : ''}">
+              <div class="month-row-left">
+                <div class="month-number">0${month}</div>
+                <div class="month-info">
+                  <div class="month-status">${isUnlocked ? 'Unlocked' : 'Locked'}</div>
+                  <div class="month-label">${content.label}</div>
+                </div>
+              </div>
+              ${actionHtml}
+            </div>`;
         });
       } else {
-        contentHtml = `<p style="color:var(--white-mute);font-size:0.85rem;">Content coming soon.</p>`;
+        monthsHtml = `<p style="color:var(--white-mute);font-size:0.85rem;">Content coming soon.</p>`;
       }
+
       card.innerHTML = `
-        <div class="product-tag">${product.tag}</div>
-        <h3>${product.name}</h3>
-        <p>${product.desc}</p>
-        ${contentHtml}`;
+        <div class="sub-card-inner">
+          <div class="sub-card-left">
+            <div>
+              <div class="sub-tag">${product.tag}</div>
+              <h3>${product.name}</h3>
+              <p>${product.desc}</p>
+            </div>
+          </div>
+          <div class="sub-card-right">
+            ${monthsHtml}
+          </div>
+        </div>`;
       return card;
     }
 
     function renderOTPCard(product) {
       const card = document.createElement('div');
-      card.className = 'product-card';
+      card.className = 'otp-card';
       card.innerHTML = `
-        <div class="product-tag">${product.tag}</div>
+        <div class="otp-tag">${product.tag}</div>
         <h3>${product.name}</h3>
         <p>${product.desc}</p>
-        ${product.file ? `
-          <a href="files/${product.file}" download class="download-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download PDF
-          </a>` : `<span style="color:var(--white-mute);font-size:0.85rem;">File coming soon</span>`}`;
+        ${product.file
+          ? `<a href="files/${product.file}" download class="download-btn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download PDF
+            </a>`
+          : `<span class="coming-soon-tag">Coming Soon</span>`}`;
       return card;
     }
 
