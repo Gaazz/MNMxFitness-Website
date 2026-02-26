@@ -238,7 +238,7 @@
 
   <script src="main.js"></script>
   <script>
-    const WORKER_URL = 'https://mnmfitness02.mnmfitness02.workers.dev';
+    const WORKER_URL = 'https://mnmxfitness.ca';
 
     const SUBSCRIPTION_PRODUCTS = {
       '6-week-training-block': {
@@ -316,6 +316,7 @@
         if (res.status === 401) {
           document.getElementById('membersContent').style.display = 'none';
           document.getElementById('authRequired').style.display = 'block';
+          document.getElementById('authRequired').innerHTML += `<p style="color:#f91e0f;font-size:0.8rem;margin-top:1rem;">Debug: 401 - cookies: ${document.cookie ? 'present' : 'empty'}</p>`;
           return;
         }
         const member = await res.json();
@@ -323,6 +324,7 @@
       } catch (err) {
         document.getElementById('membersContent').style.display = 'none';
         document.getElementById('authRequired').style.display = 'block';
+        document.getElementById('authRequired').innerHTML += `<p style="color:#f91e0f;font-size:0.8rem;margin-top:1rem;">Debug: ${err.message}</p>`;
       }
     }
 

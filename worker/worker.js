@@ -2,8 +2,9 @@
 // Handles: Stripe webhooks, magic link auth, session management, protected content
 
 const RESEND_API_KEY = 're_cr1DTCVy_G5bpTrMwfSC4MmJWYABy8DBq';
-const STRIPE_WEBHOOK_SECRET = 'whsec_1kd0lvcbMTJkHa6z7YLRKcs8BBnf14Ui';
-const SITE_URL = 'https://mnmfitness02.mnmfitness02.workers.dev';
+const STRIPE_WEBHOOK_SECRET_LIVE = 'whsec_1kd0lvcbMTJkHa6z7YLRKcs8BBnf14Ui';
+const STRIPE_WEBHOOK_SECRET_TEST = 'whsec_maYL9EX5A1gFZANcbAK93trkcFHIeFml';
+const SITE_URL = 'https://mnmxfitness.ca';
 
 export default {
   async fetch(request, env) {
@@ -26,15 +27,17 @@ export default {
     if (path === '/auth/logout' && request.method === 'POST') return handleLogout(request, env, corsHeaders);
     if (path === '/api/member' && request.method === 'GET') return handleGetMember(request, env, corsHeaders);
 
-    return new Response('Not found', { status: 404 });
+    // Pass everything else through to Cloudflare Pages
+    return fetch(request);
   }
 };
 
 async function handleStripeWebhook(request, env) {
   const signature = request.headers.get('stripe-signature');
   const body = await request.text();
-  const isValid = await verifyStripeSignature(body, signature, STRIPE_WEBHOOK_SECRET);
-  if (!isValid) return new Response('Invalid signature', { status: 401 });
+  const isValidLive = await verifyStripeSignature(body, signature, STRIPE_WEBHOOK_SECRET_LIVE);
+  const isValidTest = await verifyStripeSignature(body, signature, STRIPE_WEBHOOK_SECRET_TEST);
+  if (!isValidLive && !isValidTest) return new Response('Invalid signature', { status: 401 });
 
   const event = JSON.parse(body);
   if (event.type === 'checkout.session.completed') await handleCheckoutCompleted(event.data.object, env);
@@ -111,11 +114,22 @@ async function handleVerifyToken(request, env) {
   const sessionId = generateId();
   await env.MNM_SESSIONS.put(`session:${sessionId}`, JSON.stringify({ email, createdAt: Date.now() }), { expirationTtl: 60 * 60 * 24 * 30 });
 
-  return new Response(null, {
-    status: 302,
+  // Use an HTML page to set cookie via JS and then redirect
+  // This ensures the cookie is set before the members page loads
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Logging in...</title></head>
+<body style="background:#0b0b0b;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;">
+<p>Logging you in...</p>
+<script>
+  document.cookie = "mnm_session=${sessionId}; path=/; max-age=${60 * 60 * 24 * 30}; samesite=lax; secure";
+  window.location.href = "${SITE_URL}/members.html";
+</script>
+</body></html>`;
+
+  return new Response(html, {
+    status: 200,
     headers: {
-      'Location': `${SITE_URL}/members.html`,
-      'Set-Cookie': `mnm_session=${sessionId}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 30}`
+      'Content-Type': 'text/html',
+      'Set-Cookie': `mnm_session=${sessionId}; Path=/; Secure; SameSite=Lax; Max-Age=${60 * 60 * 24 * 30}`
     }
   });
 }
@@ -195,7 +209,7 @@ async function sendMagicLink(email, env, isNewUser) {
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: 'onboarding@resend.dev', to: email, subject, html })
+    body: JSON.stringify({ from: 'MNM Fitness <noreply@mnmxfitness.ca>', to: email, subject, html })
   });
 }
 
